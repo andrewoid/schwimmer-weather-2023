@@ -1,4 +1,4 @@
-package openweathermap.json;
+package openweathermap.json.current;
 
 public class Sys {
     private int type;

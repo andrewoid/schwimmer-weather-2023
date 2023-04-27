@@ -1,4 +1,4 @@
-package openweathermap.json;
+package openweathermap.json.current;
 
 public class Main {
     private double temp;

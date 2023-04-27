@@ -1,4 +1,6 @@
-package openweathermap.json;
+package openweathermap.json.current;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -13,7 +15,8 @@ public class CurrentWeather{
     private int visibility;
     private Wind wind;
     private Clouds clouds;
-    private int dt;
+    @SerializedName("dt")
+    private int dateTime;
     private Sys sys;
     private int timezone;
     private int id;
@@ -62,11 +65,11 @@ public class CurrentWeather{
     public void setClouds(Clouds input){
         this.clouds = input;
     }
-    public int getDt(){
-        return dt;
+    public int getDateTime(){
+        return dateTime;
     }
-    public void setDt(int input){
-        this.dt = input;
+    public void setDateTime(int input){
+        this.dateTime = input;
     }
     public Sys getSys(){
         return sys;
