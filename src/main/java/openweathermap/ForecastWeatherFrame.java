@@ -7,6 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ForecastWeatherFrame extends JFrame {
 
@@ -18,6 +20,8 @@ public class ForecastWeatherFrame extends JFrame {
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build();
     private final OpenWeatherMapService service = retrofit.create(OpenWeatherMapService.class);
+
+    private ForecastWeatherController controller;
 
     public ForecastWeatherFrame() {
 
@@ -38,17 +42,11 @@ public class ForecastWeatherFrame extends JFrame {
 
         setContentPane(panel);
 
-        submitButton.addActionListener(e -> updateWeather());
+        controller = new ForecastWeatherController(view, service);
 
-        updateWeather();
+        submitButton.addActionListener(e -> controller.updateWeather(location.getText()));
+
+        controller.updateWeather(location.getText());
     }
 
-    public void updateWeather() {
-        service.getForecast(location.getText())
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.newThread())
-                //.observeOn(AndroidSchedulers.mainThread()) // on Android Only
-                .subscribe(view::setForecastWeather,
-                        Throwable::printStackTrace);
-    }
 }
