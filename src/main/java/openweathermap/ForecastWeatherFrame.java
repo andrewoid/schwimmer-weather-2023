@@ -1,26 +1,23 @@
 package openweathermap;
 
-import io.reactivex.rxjava3.functions.Consumer;
-import openweathermap.json.forecast.ForecastWeather;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ForecastWeatherFrame extends JFrame {
 
     private final JTextField location;
     private final ForecastWeatherView view;
-    Retrofit retrofit = new Retrofit.Builder()
+    private final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://api.openweathermap.org/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build();
-    OpenWeatherMapService service = retrofit.create(OpenWeatherMapService.class);
+    private final OpenWeatherMapService service = retrofit.create(OpenWeatherMapService.class);
 
     public ForecastWeatherFrame() {
 
@@ -48,6 +45,10 @@ public class ForecastWeatherFrame extends JFrame {
 
     public void updateWeather() {
         service.getForecast(location.getText())
-                .subscribe(view::setForecastWeather, Throwable::printStackTrace);
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.newThread())
+                //.observeOn(AndroidSchedulers.mainThread()) // on Android Only
+                .subscribe(view::setForecastWeather,
+                        Throwable::printStackTrace);
     }
 }
