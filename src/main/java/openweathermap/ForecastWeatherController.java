@@ -8,6 +8,7 @@ public class ForecastWeatherController {
 
     private ForecastWeatherView view;
     private OpenWeatherMapService service;
+
     @Inject
     public ForecastWeatherController(
             ForecastWeatherView view,
