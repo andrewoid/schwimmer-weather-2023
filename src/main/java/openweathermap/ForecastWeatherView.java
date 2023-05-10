@@ -2,10 +2,18 @@ package openweathermap;
 
 import openweathermap.json.forecast.ForecastWeather;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.swing.*;
 import java.awt.*;
 
+@Singleton
 public class ForecastWeatherView extends JComponent {
+
+    @Inject
+    public ForecastWeatherView() {
+
+    }
 
     private ForecastWeather forecastWeather;
 

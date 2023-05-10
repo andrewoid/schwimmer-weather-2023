@@ -5,21 +5,24 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ForecastWeatherFrame extends JFrame {
 
     private final JTextField location;
     private final ForecastWeatherView view;
-    private final Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-            .build();
-    private final OpenWeatherMapService service = retrofit.create(OpenWeatherMapService.class);
 
-    public ForecastWeatherFrame() {
+    private ForecastWeatherController controller;
+
+    @Inject
+    public ForecastWeatherFrame(ForecastWeatherView view, ForecastWeatherController controller) {
+
+        this.view = view;
+        this.controller = controller;
 
         setSize(800, 600);
         setTitle("Forecast Weather");
@@ -32,23 +35,14 @@ public class ForecastWeatherFrame extends JFrame {
         northPanel.add(submitButton, BorderLayout.EAST);
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        view = new ForecastWeatherView();
         panel.add(view, BorderLayout.CENTER);
         panel.add(northPanel, BorderLayout.NORTH);
 
         setContentPane(panel);
 
-        submitButton.addActionListener(e -> updateWeather());
+        submitButton.addActionListener(e -> controller.updateWeather(location.getText()));
 
-        updateWeather();
+        controller.updateWeather(location.getText());
     }
 
-    public void updateWeather() {
-        service.getForecast(location.getText())
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.newThread())
-                //.observeOn(AndroidSchedulers.mainThread()) // on Android Only
-                .subscribe(view::setForecastWeather,
-                        Throwable::printStackTrace);
-    }
 }
