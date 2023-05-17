@@ -1,5 +1,7 @@
 package openweathermap;
 
+import hu.akarnokd.rxjava3.swing.RxSwingPlugins;
+import hu.akarnokd.rxjava3.swing.SwingSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.functions.Function;
@@ -16,7 +18,7 @@ class ForecastWeatherControllerTest {
     static {
         // This makes it so that our Service returns immediately.
         RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
-        RxJavaPlugins.setNewThreadSchedulerHandler(scheduler -> Schedulers.trampoline());
+        RxSwingPlugins.setOnEdtScheduler(scheduler -> Schedulers.trampoline());
     }
 
     @Test

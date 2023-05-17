@@ -1,5 +1,7 @@
 package openweathermap;
 
+import hu.akarnokd.rxjava3.swing.SwingSchedulers;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import javax.inject.Inject;
@@ -19,9 +21,9 @@ public class ForecastWeatherController {
     }
 
     public void updateWeather(String location) {
-        service.getForecast(location)
+        Disposable disposable = service.getForecast(location)
                 .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.newThread())
+                .observeOn(SwingSchedulers.edt())
                 //.observeOn(AndroidSchedulers.mainThread()) // on Android Only
                 .subscribe(view::setForecastWeather,
                         Throwable::printStackTrace);
