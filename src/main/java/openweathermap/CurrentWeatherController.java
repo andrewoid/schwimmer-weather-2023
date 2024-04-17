@@ -17,6 +17,8 @@ public class CurrentWeatherController {
     private JLabel imageLabel;
     private JLabel degreesLabel;
 
+    private ApiKey apiKey = new ApiKey();
+
     @Inject
     public CurrentWeatherController(
             OpenWeatherMapService service,
@@ -28,7 +30,7 @@ public class CurrentWeatherController {
     }
 
     public void updateWeather(String location) {
-        Disposable disposable = service.getCurrent(location)
+        Disposable disposable = service.getCurrent(apiKey.toString(), location)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.newThread())
                 //.observeOn(AndroidSchedulers.mainThread()) // on Android Only
