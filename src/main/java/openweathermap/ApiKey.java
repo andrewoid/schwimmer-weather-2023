@@ -1,6 +1,7 @@
 package openweathermap;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -13,7 +14,10 @@ public class ApiKey {
     public ApiKey() {
         try {
             // Load properties from file
-            properties.load(ApiKey.class.getResourceAsStream("/apikey.properties"));
+            InputStream in = ApiKey.class.getResourceAsStream("/apikey.properties");
+            if (in != null) {
+                properties.load(in);
+            }
         } catch (IOException e) {
             // this will fail when run on a machine without the Properties file
         }
