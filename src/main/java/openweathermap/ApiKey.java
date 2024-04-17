@@ -32,6 +32,6 @@ public class ApiKey {
         }
 
         // If not found, check environment variables
-        return System.getenv("apikey");
+        return System.getProperty("apikey");
     }
 }
