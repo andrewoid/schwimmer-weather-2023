@@ -29,13 +29,13 @@ class ForecastWeatherControllerTest {
         ForecastWeatherController controller = new ForecastWeatherController(view, service);
         ForecastWeather forecastWeather = mock();
         Observable<ForecastWeather> observable = Observable.just(forecastWeather);
-        doReturn(observable).when(service).getForecast("New York");
+        doReturn(observable).when(service).getForecast(anyString(),"New York");
 
         // when
         controller.updateWeather("New York");
 
         // then
-        verify(service).getForecast("New York");
+        verify(service).getForecast(anyString(), "New York");
         verify(view).setForecastWeather(forecastWeather);
     }
 

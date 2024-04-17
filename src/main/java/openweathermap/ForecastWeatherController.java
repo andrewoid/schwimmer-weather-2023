@@ -11,6 +11,8 @@ public class ForecastWeatherController {
     private ForecastWeatherView view;
     private OpenWeatherMapService service;
 
+    private ApiKey apiKey = new ApiKey();
+
     @Inject
     public ForecastWeatherController(
             ForecastWeatherView view,
@@ -21,7 +23,7 @@ public class ForecastWeatherController {
     }
 
     public void updateWeather(String location) {
-        Disposable disposable = service.getForecast(location)
+        Disposable disposable = service.getForecast(apiKey.toString(), location)
                 .subscribeOn(Schedulers.io())
                 .observeOn(SwingSchedulers.edt())
                 //.observeOn(AndroidSchedulers.mainThread()) // on Android Only

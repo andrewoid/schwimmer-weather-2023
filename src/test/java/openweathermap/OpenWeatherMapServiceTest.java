@@ -18,12 +18,14 @@ public class OpenWeatherMapServiceTest {
             .build();
     OpenWeatherMapService service = retrofit.create(OpenWeatherMapService.class);
 
+    ApiKey apiKey = new ApiKey();
+
     @Test
     public void getCurrentWeather() {
         // given
 
         // when
-        CurrentWeather weather = service.getCurrent("New York").blockingFirst();
+        CurrentWeather weather = service.getCurrent(apiKey.toString(), "New York").blockingFirst();
 
         // then
         assertNotNull(weather);
@@ -36,7 +38,7 @@ public class OpenWeatherMapServiceTest {
         // given
 
         // when
-        ForecastWeather forecast = service.getForecast("New York").blockingFirst();
+        ForecastWeather forecast = service.getForecast(apiKey.toString(), "New York").blockingFirst();
 
         // then
         assertNotNull(forecast);
