@@ -14,11 +14,14 @@ import java.awt.event.ActionListener;
 
 public class ForecastWeatherFrame extends JFrame {
 
-    private final JTextField location;
+    private final JPanel panel;
+    private JTextField location;
     private final ForecastWeatherView view;
 
-    private ForecastWeatherController controller;
-    private CurrentWeatherController currentWeatherController;
+    private final ForecastWeatherController controller;
+    private final CurrentWeatherController currentWeatherController;
+    private final JLabel imageLabel;
+    private final JLabel degreesLabel;
 
     @Inject
     public ForecastWeatherFrame(ForecastWeatherView view,
@@ -30,36 +33,72 @@ public class ForecastWeatherFrame extends JFrame {
         this.view = view;
         this.controller = controller;
         this.currentWeatherController = currentWeatherController;
+        this.imageLabel = imageLabel;
+        this.degreesLabel = degreesLabel;
 
         setSize(800, 600);
         setTitle("Forecast Weather");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        JPanel northPanel = new JPanel(new BorderLayout());
-        location = new JTextField("New York");
-        JButton submitButton = new JButton("Submit");
-        northPanel.add(location, BorderLayout.CENTER);
-        northPanel.add(submitButton, BorderLayout.EAST);
+        panel = new JPanel(new GridBagLayout());
 
-        JPanel currentWeatherPanel = new JPanel();
-        currentWeatherPanel.add(imageLabel);
-        currentWeatherPanel.add(degreesLabel);
-        northPanel.add(currentWeatherPanel, BorderLayout.SOUTH);
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.add(view, BorderLayout.CENTER);
-        panel.add(northPanel, BorderLayout.NORTH);
+        addLocationField();
+        addSubmitButton();
+        addImageLabel();
+        addDegreesLabel();
+        addForecastWeatherView();
 
         setContentPane(panel);
 
+        controller.updateWeather(location.getText());
+        currentWeatherController.updateWeather(location.getText());
+    }
+
+    private void addForecastWeatherView() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.gridwidth = 4;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.fill = GridBagConstraints.BOTH;
+        panel.add(view, constraints);
+    }
+
+    private void addDegreesLabel() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        panel.add(degreesLabel,constraints);
+    }
+
+    private void addImageLabel() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        panel.add(imageLabel, constraints);
+    }
+
+    private void addSubmitButton() {
+        JButton submitButton = new JButton("Submit");
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 3;
+        constraints.gridy = 0;
+        panel.add(submitButton, constraints);
         submitButton.addActionListener(e -> {
             controller.updateWeather(location.getText());
             currentWeatherController.updateWeather(location.getText());
         });
+    }
 
-        controller.updateWeather(location.getText());
-        currentWeatherController.updateWeather(location.getText());
+    private void addLocationField() {
+        location = new JTextField("New York");
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 4;
+        panel.add(location, constraints);
     }
 
 }
